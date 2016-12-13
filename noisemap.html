@@ -1,0 +1,71 @@
+<!doctype HTML>
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				var arr = []
+				var temp = []
+				for(var i = 0; i < 255; i++){
+					arr.push(toHex(i))
+				}
+				var x = 0
+				var y = 0
+				console.time('populate()')
+				populate(window.innerWidth, window.innerHeight)	
+				console.timeEnd('populate()')
+				function populate(width, height){
+					console.log(width + " " + height )
+					var tot = []
+					var curr = randomize()
+					var next = randomize()
+					for(var h = 0; h <= height; h++){
+						for(var w = 0; w <= width; w++){
+							for(var x = 0; x < 3; x++){
+								temp.push(min(curr, next))
+								curr = next
+								next = randomize()
+							}
+							tot.push(temp)
+							temp = []
+						}
+						
+					}
+						create(tot, width)
+				}
+				function create(noise, w){
+					var j = 0
+					var k = 0
+					var asd = ""
+					for(var i = 0; i < noise.length; i++){
+						asd = "#"+( arr[noise[i][0]] + arr[noise[i][1]] + arr[noise[i][2]] )
+						if(j > w){
+							j=0
+							k++
+						}
+						createRect(j,k,1,1,asd)
+						j++
+					}
+				}
+				function createRect(x,y,l,w,color){
+					console.log(x	)
+					$("#the").append("<div style = 'margin:0;padding:0;background-color:" + color + ";position:absolute;left" + x + "px;top:" + y + "px;width:" + w + "px;height:" + l + "px;'></div>")
+				}
+				function randomize(){
+					return Math.floor(Math.random() * 256)		
+				}
+				function toHex(a){
+    					var hex = a.toString(16)
+	  	 			return hex.length == 1 ? "0" + hex : hex + ""			
+				}
+				function min(a,b){
+					return a > b ? b : a
+				}
+			})	
+		</script>
+	</head>
+	<body>
+		<div id = "the" style= "width:100vw;height:100vh;padding:0;margin:0;"></div>
+	</body>
+	
+</html>
